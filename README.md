@@ -1,5 +1,7 @@
 # Windows Host Networking, WSL, and VLAN Validation Lab
 
+Last reviewed: April 13, 2026
+
 This repo documents a Windows-based homelab troubleshooting workflow that touched three related areas:
 
 - managed switch VLAN review
@@ -18,6 +20,10 @@ Validate how a Windows workstation interacted with a small lab network that incl
 - SSH access to Linux lab nodes
 
 The main goal was to separate host-level connectivity from WSL-specific failure modes instead of treating all network symptoms as one problem.
+
+## Lab Relationship
+
+This repo fits between endpoint support work and broader homelab operations. It is useful as evidence of Windows networking diagnosis on a workstation that also carries Hyper-V and WSL complexity, rather than as a pure switch-configuration or VLAN-build project.
 
 ## Environment
 
@@ -137,6 +143,23 @@ Evidence:
 
 - [11-ssh-publickey-failure.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/11-ssh-publickey-failure.png)
 - [12-ssh-pi-core-success.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/12-ssh-pi-core-success.png)
+
+## What I Learned
+
+- Windows host networking, Hyper-V virtual adapters, and WSL resolver behavior can fail independently even when they share the same workstation.
+- Validating DNS from the Windows host before focusing on WSL narrows the problem much faster.
+- Mixed SSH results are useful evidence. A single successful path proves the workstation is not experiencing a universal outbound failure.
+
+## Problems Encountered / Notes
+
+- This evidence set documents diagnosis and narrowing, not a complete end-to-end remediation for every symptom shown.
+- The repo is intentionally written as a troubleshooting case study rather than a claim that every networking issue in the screenshots was resolved in the same session.
+- `TODO`: add the exact WSL resolver fix in a future revision if you want this repo to include remediation, not just diagnosis and validation.
+- `TODO`: add a short diagram or table mapping the Windows host adapters to their intended roles.
+
+## Outcome
+
+The final evidence set shows that Windows host connectivity, WSL DNS behavior, and SSH path health were tested separately rather than treated as one undifferentiated problem. That makes this repo stronger as a troubleshooting example than a simple “network issue fixed” summary.
 
 ## What I Learned
 
