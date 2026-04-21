@@ -44,9 +44,19 @@ This repo fits between endpoint support work and broader homelab operations. It 
 - Using DNS checks and SSH tests to isolate where the failure actually lives
 - Keeping troubleshooting evidence organized enough to reuse in portfolio documentation
 
+## Hiring Manager Quick View
+
+| Review area | Evidence |
+|---|---|
+| Windows networking | Adapter inventory, route table, DNS checks, and connectivity validation |
+| Virtualization context | Hyper-V virtual adapters reviewed alongside physical host networking |
+| WSL troubleshooting | WSL install succeeded, then package-resolution failure was isolated from host DNS |
+| SSH troubleshooting | One Linux SSH path failed with public-key error while another succeeded, narrowing the fault domain |
+| Documentation quality | Redacted screenshot set, evidence map, and clear boundary between diagnosis and remediation |
+
 ## Evidence Set
 
-Screenshots are stored in [`images/`](/home/dallas/projects/windows-hyperv-wsl-network-lab/images).
+Screenshots are stored in [`images/`](images/).
 
 Current sequence:
 
@@ -74,12 +84,12 @@ The first screenshots capture the switch-side view of the network:
 
 Evidence:
 
-- [01-switch-vlan-overview.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/01-switch-vlan-overview.png)
-- [02-switch-port-vlan-membership.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/02-switch-port-vlan-membership.png)
+- [01-switch-vlan-overview.png](images/01-switch-vlan-overview.png)
+- [02-switch-port-vlan-membership.png](images/02-switch-port-vlan-membership.png)
 
-Note:
+Scope note:
 
-- `TODO`: document the intended role of each VLAN in a future revision if you want this repo to read more like a full segmentation lab instead of a troubleshooting case study.
+- This repo is a troubleshooting case study, not a full VLAN segmentation design. The VLAN screenshots are included as supporting context for the Windows host investigation.
 
 ### 2. Inspect the Windows host networking stack
 
@@ -93,9 +103,9 @@ Observed evidence:
 
 Evidence:
 
-- [03-windows-adapter-overview.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/03-windows-adapter-overview.png)
-- [04-windows-ip-configuration.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/04-windows-ip-configuration.png)
-- [05-windows-route-table.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/05-windows-route-table.png)
+- [03-windows-adapter-overview.png](images/03-windows-adapter-overview.png)
+- [04-windows-ip-configuration.png](images/04-windows-ip-configuration.png)
+- [05-windows-route-table.png](images/05-windows-route-table.png)
 
 ### 3. Bring up WSL and identify the first failure
 
@@ -110,9 +120,9 @@ That matters because it showed:
 
 Evidence:
 
-- [06-wsl-not-installed.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/06-wsl-not-installed.png)
-- [07-wsl-distro-list.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/07-wsl-distro-list.png)
-- [08-wsl-install-and-dns-failure.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/08-wsl-install-and-dns-failure.png)
+- [06-wsl-not-installed.png](images/06-wsl-not-installed.png)
+- [07-wsl-distro-list.png](images/07-wsl-distro-list.png)
+- [08-wsl-install-and-dns-failure.png](images/08-wsl-install-and-dns-failure.png)
 
 ### 4. Validate that Windows DNS and general connectivity still worked
 
@@ -127,8 +137,8 @@ That narrowed the problem. The host was not completely offline. The failure was 
 
 Evidence:
 
-- [09-dns-check-archive-ubuntu.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/09-dns-check-archive-ubuntu.png)
-- [10-dns-check-security-ubuntu-and-ping.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/10-dns-check-security-ubuntu-and-ping.png)
+- [09-dns-check-archive-ubuntu.png](images/09-dns-check-archive-ubuntu.png)
+- [10-dns-check-security-ubuntu-and-ping.png](images/10-dns-check-security-ubuntu-and-ping.png)
 
 ### 5. Test Linux-node access from the Windows workstation
 
@@ -141,8 +151,8 @@ That is operationally useful because it proves Windows-to-Linux access was not u
 
 Evidence:
 
-- [11-ssh-publickey-failure.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/11-ssh-publickey-failure.png)
-- [12-ssh-pi-core-success.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/12-ssh-pi-core-success.png)
+- [11-ssh-publickey-failure.png](images/11-ssh-publickey-failure.png)
+- [12-ssh-pi-core-success.png](images/12-ssh-pi-core-success.png)
 
 ## What I Learned
 
@@ -154,26 +164,7 @@ Evidence:
 
 - This evidence set documents diagnosis and narrowing, not a complete end-to-end remediation for every symptom shown.
 - The repo is intentionally written as a troubleshooting case study rather than a claim that every networking issue in the screenshots was resolved in the same session.
-- `TODO`: add the exact WSL resolver fix in a future revision if you want this repo to include remediation, not just diagnosis and validation.
-- `TODO`: add a short diagram or table mapping the Windows host adapters to their intended roles.
-
-## Outcome
-
-The final evidence set shows that Windows host connectivity, WSL DNS behavior, and SSH path health were tested separately rather than treated as one undifferentiated problem. That makes this repo stronger as a troubleshooting example than a simple “network issue fixed” summary.
-
-## What I Learned
-
-- Hyper-V hosts can carry enough virtual networking state that "the network is broken" is usually too vague to be actionable.
-- Windows host connectivity, SSH reachability, and WSL package resolution should be tested separately.
-- A route table and adapter snapshot are often more useful early evidence than repeated browser retries.
-- Switch-side VLAN review is valuable context, but host-side validation is what narrows the actual fault domain.
-
-## Problems Encountered / Notes
-
-- WSL package operations failed after installation because repository names were not resolving from inside WSL.
-- One SSH path failed with `Permission denied (publickey)` while another worked, indicating a credential/path mismatch rather than a blanket connectivity outage.
-- `TODO`: add the exact WSL resolver fix in a future revision if you want this repo to include remediation, not just diagnosis and validation.
-- `TODO`: add a short diagram or table mapping the Windows host adapters to their intended roles.
+- A future lab can document the exact WSL resolver remediation if that fix is captured with clean evidence. This repo stays honest about the evidence it currently contains.
 
 ## Redaction Review
 
@@ -181,23 +172,23 @@ The sensitive screenshots in this repo were redacted in place before publication
 
 Redactions were applied where needed for:
 
-- [01-switch-vlan-overview.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/01-switch-vlan-overview.png)
+- [01-switch-vlan-overview.png](images/01-switch-vlan-overview.png)
   - exposes switch UI details and internal addressing context
-- [02-switch-port-vlan-membership.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/02-switch-port-vlan-membership.png)
+- [02-switch-port-vlan-membership.png](images/02-switch-port-vlan-membership.png)
   - exposes device names and VLAN membership details
-- [03-windows-adapter-overview.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/03-windows-adapter-overview.png)
+- [03-windows-adapter-overview.png](images/03-windows-adapter-overview.png)
   - exposes adapter names and Wi-Fi SSID
-- [04-windows-ip-configuration.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/04-windows-ip-configuration.png)
+- [04-windows-ip-configuration.png](images/04-windows-ip-configuration.png)
   - exposes internal IP ranges
-- [05-windows-route-table.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/05-windows-route-table.png)
+- [05-windows-route-table.png](images/05-windows-route-table.png)
   - exposes internal IPs and MAC addresses
-- [09-dns-check-archive-ubuntu.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/09-dns-check-archive-ubuntu.png)
+- [09-dns-check-archive-ubuntu.png](images/09-dns-check-archive-ubuntu.png)
   - exposes internal resolver address
-- [10-dns-check-security-ubuntu-and-ping.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/10-dns-check-security-ubuntu-and-ping.png)
+- [10-dns-check-security-ubuntu-and-ping.png](images/10-dns-check-security-ubuntu-and-ping.png)
   - exposes internal resolver address
-- [11-ssh-publickey-failure.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/11-ssh-publickey-failure.png)
+- [11-ssh-publickey-failure.png](images/11-ssh-publickey-failure.png)
   - exposes internal host addressing
-- [12-ssh-pi-core-success.png](/home/dallas/projects/windows-hyperv-wsl-network-lab/images/12-ssh-pi-core-success.png)
+- [12-ssh-pi-core-success.png](images/12-ssh-pi-core-success.png)
   - exposes internal hostnames
 
 ## Outcome
