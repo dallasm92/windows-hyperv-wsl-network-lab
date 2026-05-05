@@ -2,6 +2,9 @@
 
 Last reviewed: April 13, 2026
 
+Social preview asset:
+- [assets/social-preview.png](assets/social-preview.png)
+
 This repo documents a Windows-based homelab troubleshooting workflow that touched three related areas:
 
 - managed switch VLAN review
